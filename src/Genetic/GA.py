@@ -34,7 +34,8 @@ class Repeater():
         self.radius = r
         
     def __str__(self):
-        return 'Repeater at %s of r %s' % (self.loc, self.radius)
+        #return 'Repeater at %s with r=%s' % (self.loc, self.radius)
+        return '[%s, %s]' % (self.loc[0], self.loc[1])
         
     __repr__ = __str__
 
@@ -45,7 +46,7 @@ class GeneticAlgorithm():
         self.generation = 0
 
     def crossover(self, male, female, half):
-        return choice([male[:half] + female[half:], male[half:] + female[:half]])
+        return male[:half] + female[half:]
     
     def individual(self, repeater_radius = 5):
         repeaters = []
@@ -66,13 +67,13 @@ class GeneticAlgorithm():
         return pop
     
     def fitness(self, individual):
-        #highest coverage
-        points_covered = 0
+        #need to fix
+        points_covered = 0.0
         for repeater in individual:
             for point in self.grid.points:
                 if point_enclosed_by_circle(repeater.loc, repeater.radius, point):
                     points_covered += 1
-        return 1.0 / (min(points_covered, self.grid.size) / float(len(individual)))
+        return (self.grid.size / points_covered) / len(individual)
     
     def grade(self):
         summed = reduce(add, (x[0] for x in self.population))
