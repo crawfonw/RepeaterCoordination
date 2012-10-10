@@ -10,7 +10,7 @@ class Grid():
         self.center = (center[0]*scale, center[1]*scale)
         self.radius = radius*scale
         self.points = self.generate_points()
-        self.prune_points()
+        self.points = self.prune_points()
         self.size = len(self.points)
     
     def generate_points(self):
@@ -21,9 +21,11 @@ class Grid():
         return points
     
     def prune_points(self):
+        new_points = []
         for point in self.points:
-            if not point_enclosed_by_circle(self.center, self.radius, point):
-                self.points.remove(point)
+            if point_enclosed_by_circle(self.center, self.radius, point):
+                new_points.append(point)
+        return new_points
 
 class Repeater():    
     def __init__(self, xy, r): #xy is a 2-tuple
